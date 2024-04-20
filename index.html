@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/utils/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="assets/utils/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Entregable 2 - Juan Encabo</title>
+</head>
+
+<body>
+
+  <div class="row">
+
+    <div class="col-sm-2 menuDropdown">
+
+      <div class="dropdown">
+        <button class="dropdown-toggle" type="button" id="archivoDropdown" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          Archivo
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="archivoDropdown">
+          <li>
+            <button id="clean" class="dropdown-item">
+              <i class="fa-regular fa-file"></i>
+              Nuevo
+            </button>
+          </li>
+          <div class="dropdown-divider" style="background-color: white;"></div>
+          <li>
+            <button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#uploadImage">
+              <i class="fas fa-upload"></i>
+              Cargar imagen
+            </button>
+          </li>
+          <div class="dropdown-divider" style="background-color: white;"></div>
+          <li>
+            <button id="saveImage" class="dropdown-item" href="#">
+              <i class="fas fa-save"></i>
+              Guardar imagen
+            </button>
+          </li>
+          <div class="dropdown-divider" style="background-color: white;"></div>
+        </ul>
+      </div>
+
+    </div>
+    <div class="col-sm-8">
+
+      <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <button id="pen" type="button"><i class="fa-solid fa-pen"></i></button>
+        </li>
+        <li class="nav-item">
+          <input type="color" id="color" value="#000000">
+        </li>
+        <li class="nav-item item-range">
+          <div>
+            
+            <input type="range" class="form-range" id="range1" min="1" max="100" value="1">
+          </div>
+          &nbsp;
+          &nbsp;
+          <div id="valueRange"></div>
+        </li>
+        <li class="nav-item">
+          <button id="eraser"><i class="fa-solid fa-eraser"></i></button>
+        </li>
+        <li class="nav-item ">
+
+          <div class="dropdown menuFilters">
+            <button class="dropdown-toggle" type="button" id="filtrosDropdown" data-bs-toggle="dropdown"
+              aria-expanded="true">
+              Aplicar Filtro
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="filtrosDropdown">
+              <li><button class="dropdown-item " id="filterSepia">Filtro sepia</button></li>
+              <li><button class="dropdown-item" id="filterGray">Filtro escala de grises</button></li>
+              <li><button class="dropdown-item" id="filterGray">Friltro negativo</button></li>
+              <li><button class="dropdown-item" id="filterGray">Filtro binarizacion</button></li>
+              <li>
+                <span class="dropdown-item">
+                  Brillo
+                  <br>
+                  <input type="range" min="-100" max="100" value="0">
+                </span>
+              </li>
+              <li>
+                <span class="dropdown-item">
+                  Saturación
+                  <br>
+                  <input type="range" id="saturationRange" min="-100" max="100" value="0">
+                </span>
+              </li>
+              <div class="dropdown-divider"></div>
+            </ul>
+          </div>
+
+        </li>
+        <li class="nav-item ">
+          <button id="reloadImage"><i class="fa-solid fa-rotate"></i></button>
+        </li>
+      </ul>
+
+    </div>
+
+    <div class="col-sm-1">
+      <div id="showName"></div>
+    </div>
+  </div>
+
+
+  <canvas id="canvas"></canvas>
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="uploadImage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Cargar Imagen</h1>
+        </div>
+        <div class="modal-body">
+          <h3>Ingrese una imagen </h3>
+          <div class="alert alert-warning" role="alert">
+            <p><i class="fa-solid fa-circle-exclamation"></i> Por favor, seleccione una imagen en uno de los formatos
+              mencionados a continuación.</p>
+          </div>
+          <ul>
+            <li>Formatos permitidos</li>
+            <li>.png</li>
+            <li>.jpg</li>
+            <li>.jpeg</li>
+          </ul>
+
+
+          <div class="file-select" id="src-file1">
+            <input type="file" id="imageInput" name="src-file1" aria-label="Archivo" accept=".jpg, .jpeg, .png">
+          </div>
+          <div id="fileName"></div>
+        </div>
+        <div class="modal-footer">
+          <!-- Botón para aceptar -->
+          <button type="button" class="btnAcceptImg" id="acceptImg" data-bs-dismiss="modal">Aceptar</button>
+          <button type="button" class="btnClose" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="assets/utils/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
