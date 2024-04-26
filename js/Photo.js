@@ -34,6 +34,7 @@ export default class Photo {
                 targetWidth = targetHeight * aspectRatio;
             }
 
+            
 
 
             context.drawImage(this, 0, 0, targetWidth, targetHeight);

@@ -1,6 +1,7 @@
 import Pen from './Pen.js';
 import Eraser from './Eraser.js';
 import Photo from './Photo.js';
+import Circle from './Circle.js'
 
 
 let canvas = document.querySelector("#canvas");
@@ -13,6 +14,7 @@ let windowWidth = window.innerWidth;
 
 let canvasWidth = canvas.width = windowWidth-20;
 let canvasHeight = canvas.height = 700;
+let figures = [];
 
 
 let inputColor = document.getElementById("color");
@@ -20,12 +22,13 @@ let backgroundColor = rgb(255, 255, 255);
 
 ctx.fillStyle = backgroundColor;
 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
+//rango del tamaño del lapiz o la goma 1 a 100
 let range1 = document.getElementById("range1");
 
 let image = null;
 let originalImage = null;
 let size = range1.value;
+let isDragging = false;
 
 let mouseUp = true;
 let mouseDown = false;
@@ -34,8 +37,9 @@ let erasedClick = false;
 let pencil = null;
 let saved = false;
 let eraser = null;
-
+let selectedFigure = null;
 let name= "Sin nombre";
+let offsetX, offsetY;
 
 range1.addEventListener("change", changeRange)
 changeRange();
@@ -50,25 +54,43 @@ showName.innerHTML = name;
 
 
 canvas.addEventListener("mousedown", (e) => {
+    let mouseX = e.clientX - canvas.getBoundingClientRect().left;
+    let mouseY = e.clientY - canvas.getBoundingClientRect().top;
     if (penClick) {
         mouseDown = true;
         mouseUp = false;
-        let mouseX = e.clientX - canvas.getBoundingClientRect().left;
-        let mouseY = e.clientY - canvas.getBoundingClientRect().top;
         pencil = new Pen(mouseX, mouseY, inputColor.value, ctx, 'black', size);
     }
     if (erasedClick) {
         mouseDown = true;
         mouseUp = false;
-        let mouseX = e.clientX - canvas.getBoundingClientRect().left;
-        let mouseY = e.clientY - canvas.getBoundingClientRect().top;
+
         eraser = new Eraser(mouseX, mouseY, ctx, size);
         eraser.erase();
     }
+ 
+    //recorro las figuras
+    for (let i = 0; i < figures.length; i++) {
+        let figura = figures[i];
+    
+        if (figura.isInside(mouseX, mouseY)) {
+            
+    
+            selectedFigure = figura;
+            offsetX = mouseX - figura.getPosX();
+            offsetY = mouseY - figura.getPosY();
+            isDragging = true;
+            break;
+        }
+
+
+    }
+
 });
 
 canvas.addEventListener("mouseup", (e) => {
     mouseDown = false;
+    isDragging = false;
     mouseUp = true;
 
 });
@@ -85,12 +107,27 @@ canvas.addEventListener("mousemove", (e) => {
         let mouseY = e.clientY - canvas.getBoundingClientRect().top;
         eraser.moveTo(mouseX, mouseY);
         eraser.erase();
-        console.log()
+     
+    }
+    if (isDragging && selectedFigure) {
+        const mouseX = e.clientX - canvas.getBoundingClientRect().left;
+        const mouseY = e.clientY - canvas.getBoundingClientRect().top;
+
+        // Calcula el desplazamiento actualizado
+        const newPosX = mouseX - offsetX;
+        const newPosY = mouseY - offsetY;
+
+
+
+        // Actualiza la posición de la figura seleccionada
+        selectedFigure.moveTo(newPosX, newPosY);
+
+
+//dibujo denuevo para que se vaya mostrando mientras se arrastra 
     }
 
 });
 document.getElementById("clean").addEventListener("click", () => {
-console.log(ctx)
     if(saved ){
 
         ctx.clearRect(0, 0, canvasWidth, canvasHeight); // Limpiar el canvas
@@ -117,10 +154,12 @@ function acceptImage(e) {
     let imageInput = document.getElementById("imageInput");
     let selectedImage = imageInput.files[0];
      image = new Photo(ctx, canvasWidth, canvasHeight);
-     originalImage = image; // Almacena la imagen original
+     originalImage = image; // Almacena la imagen original para recargarla con un boton
      
      //obtener el nombre del archivo para verificar que no termine con distintos formatos a png,jpg,jpeg
      let fileName = selectedImage.name;
+
+     //guardo el nombre del archivo en la variable name para usarlo en otras funciones
      name = fileName;
      let showName = document.getElementById("showName").innerHTML=name;
      document.getElementById("fileName").innerHTML = fileName;
@@ -205,6 +244,7 @@ document.getElementById("saturationRange").addEventListener("change", () => {
 
     // Aplicar el filtro de saturación con el nuevo nivel de saturación
     if (image != null) {
+        image = originalImage;
         image.saturationFilter(saturationLevel);
     }
 });
@@ -213,8 +253,23 @@ document.getElementById("saturationRange").addEventListener("change", () => {
 
 document.getElementById("saveImage").addEventListener("click", saveCanvasImage);
 
+
+//add circulo 
+
+document.getElementById("addCircle").addEventListener("click", () =>{
+    let radius = numberRandom(50);
+    let posX = numberRandom(canvasWidth - (2 * radius)) + radius; // Asegura que posX esté dentro del lienzo
+    let posY = numberRandom(canvasHeight - (2 * radius)) + radius; // Asegura que posY esté dentro del lienzo
+    let circle = new Circle("Nodo", posX, posY, radius, "green", ctx);
+    circle.draw();
+
+    //guardo las formas que se crean en un arreglo
+    figures.push(circle);
+
+
+})
+
 function saveCanvasImage() {
-    // Obtener el canvas
 
     // Crear un enlace temporal
     let link = document.createElement('a');
@@ -223,14 +278,27 @@ function saveCanvasImage() {
     let fileInput = document.getElementById("imageInput");
 
     //operador ternario, si hay un fileinput, se aplica el nombre del file sino el por defecto
-    let fileName = (fileInput.files.length > 0) ? fileInput.files[0].name : name;
+    let fileName = (fileInput.files.length > 0) ? fileInput.files[0].name : name;//este name es que se actualiza cuando cargo la imagen
 
-    // Configurar el enlace para descargar la imagen
+
     link.href = canvas.toDataURL(); // Utiliza la extensión original para determinar el tipo de imagen
     link.download = fileName; // Usa el nombre original para nombrar el archivo descargado
     saved = true;
     // Simular un clic en el enlace para descargar la imagen
     link.click();
 }
+//Numeros aleatorios limitados s
+function numberRandom(max) {
+    return Math.floor(Math.random() * (max + 1));
+}
 
 
+
+function redraw() {
+    // Limpiar el lienzo sin borrar los trazos del lápiz y la goma de borrar
+
+    // Dibujar todas las figuras nuevamente
+    figures.forEach(figure => {
+        figure.draw();
+    });
+}
