@@ -1,7 +1,6 @@
 import Pen from './Pen.js';
 import Eraser from './Eraser.js';
 import Photo from './Photo.js';
-import Circle from './Circle.js'
 
 
 let canvas = document.querySelector("#canvas");
@@ -14,7 +13,6 @@ let windowWidth = window.innerWidth;
 
 let canvasWidth = canvas.width = windowWidth-20;
 let canvasHeight = canvas.height = 700;
-let figures = [];
 
 
 let inputColor = document.getElementById("color");
@@ -22,6 +20,8 @@ let backgroundColor = rgb(255, 255, 255);
 
 ctx.fillStyle = backgroundColor;
 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+
 //rango del tamaño del lapiz o la goma 1 a 100
 let range1 = document.getElementById("range1");
 
@@ -69,22 +69,7 @@ canvas.addEventListener("mousedown", (e) => {
         eraser.erase();
     }
  
-    //recorro las figuras
-    for (let i = 0; i < figures.length; i++) {
-        let figura = figures[i];
-    
-        if (figura.isInside(mouseX, mouseY)) {
-            
-    
-            selectedFigure = figura;
-            offsetX = mouseX - figura.getPosX();
-            offsetY = mouseY - figura.getPosY();
-            isDragging = true;
-            break;
-        }
 
-
-    }
 
 });
 
@@ -128,7 +113,7 @@ canvas.addEventListener("mousemove", (e) => {
 
 });
 document.getElementById("clean").addEventListener("click", () => {
-    if(saved ){
+
 
         ctx.clearRect(0, 0, canvasWidth, canvasHeight); // Limpiar el canvas
         ctx.fillStyle = backgroundColor; // Restaurar el color de fondo
@@ -136,9 +121,9 @@ document.getElementById("clean").addEventListener("click", () => {
         image = null;
         name = "Sin nombre";
         showName.innerHTML = name;
-    }else {
-        alert("asd");
-    }
+
+        
+
     
 });
 
@@ -181,7 +166,6 @@ function acceptImage(e) {
 
 
 let imageInput = document.getElementById("imageInput");
-//cargo el nombre de la imagen en el tag con id  
 imageInput.addEventListener("change", function () {
     if (imageInput.files.length > 0) {
         // Obtener el nombre del archivo seleccionado
@@ -222,6 +206,30 @@ function rgb(r, g, b) {
 }
 
 
+
+
+document.getElementById("saveImage").addEventListener("click", saveCanvasImage);
+function saveCanvasImage() {
+
+    // Crear un enlace temporal
+    let link = document.createElement('a');
+    
+    // Obtener la extensión de la imagen original
+    let fileInput = document.getElementById("imageInput");
+
+    //operador ternario, si hay un fileinput, se aplica el nombre del file sino el por defecto
+    let fileName = (fileInput.files.length > 0) ? fileInput.files[0].name : name;//este name es que se actualiza cuando cargo la imagen
+
+
+    link.href = canvas.toDataURL(); // Utiliza la extensión original para determinar el tipo de imagen
+    link.download = fileName; // Usa el nombre original para nombrar el archivo descargado
+    saved = true;
+    // Simular un clic en el enlace para descargar la imagen
+    link.click();
+}
+
+
+
 //FILTROSSSSSSSSS
 
 document.getElementById("filterSepia").addEventListener("click",()=>
@@ -249,56 +257,3 @@ document.getElementById("saturationRange").addEventListener("change", () => {
     }
 });
 
-
-
-document.getElementById("saveImage").addEventListener("click", saveCanvasImage);
-
-
-//add circulo 
-
-document.getElementById("addCircle").addEventListener("click", () =>{
-    let radius = numberRandom(50);
-    let posX = numberRandom(canvasWidth - (2 * radius)) + radius; // Asegura que posX esté dentro del lienzo
-    let posY = numberRandom(canvasHeight - (2 * radius)) + radius; // Asegura que posY esté dentro del lienzo
-    let circle = new Circle("Nodo", posX, posY, radius, "green", ctx);
-    circle.draw();
-
-    //guardo las formas que se crean en un arreglo
-    figures.push(circle);
-
-
-})
-
-function saveCanvasImage() {
-
-    // Crear un enlace temporal
-    let link = document.createElement('a');
-    
-    // Obtener la extensión de la imagen original
-    let fileInput = document.getElementById("imageInput");
-
-    //operador ternario, si hay un fileinput, se aplica el nombre del file sino el por defecto
-    let fileName = (fileInput.files.length > 0) ? fileInput.files[0].name : name;//este name es que se actualiza cuando cargo la imagen
-
-
-    link.href = canvas.toDataURL(); // Utiliza la extensión original para determinar el tipo de imagen
-    link.download = fileName; // Usa el nombre original para nombrar el archivo descargado
-    saved = true;
-    // Simular un clic en el enlace para descargar la imagen
-    link.click();
-}
-//Numeros aleatorios limitados s
-function numberRandom(max) {
-    return Math.floor(Math.random() * (max + 1));
-}
-
-
-
-function redraw() {
-    // Limpiar el lienzo sin borrar los trazos del lápiz y la goma de borrar
-
-    // Dibujar todas las figuras nuevamente
-    figures.forEach(figure => {
-        figure.draw();
-    });
-}
