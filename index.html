@@ -78,13 +78,16 @@
             <ul class="dropdown-menu" aria-labelledby="filtrosDropdown">
               <li><button class="dropdown-item " id="filterSepia">Filtro sepia</button></li>
               <li><button class="dropdown-item" id="filterGray">Filtro escala de grises</button></li>
-              <li><button class="dropdown-item" id="filterGray">Friltro negativo</button></li>
-              <li><button class="dropdown-item" id="filterGray">Filtro binarizacion</button></li>
+              <li><button class="dropdown-item" id="filterNegative">Friltro negativo</button></li>
+              <li><button class="dropdown-item" id="filterBlur">Friltro blur</button></li>
+              <li><button class="dropdown-item" id="filterBorder">Filtro bordes</button></li>
+
+
               <li>
                 <span class="dropdown-item">
-                  Brillo
+                 -100 Brillo 100
                   <br>
-                  <input type="range" min="-100" max="100" value="0">
+                  <input type="range" id="brightnessRange" min="-100" max="100" value="0">
                 </span>
               </li>
               <li>
@@ -94,6 +97,14 @@
                   <input type="range" id="saturationRange" min="-100" max="100" value="0">
                 </span>
               </li>
+              <li>
+                <span class="dropdown-item">
+                 0 Binarizacion 255
+                  <br>
+                  <input type="range" id="thresholdRange" min="0" max="255" value="127">
+                </span>
+              </li>
+              
               <div class="dropdown-divider"></div>
             </ul>
           </div>
@@ -151,7 +162,7 @@
         <div class="modal-footer">
           <!-- Botón para aceptar -->
           <button type="button" class="btnAcceptImg" id="acceptImg" data-bs-dismiss="modal">Aceptar</button>
-          <button type="button" class="btnClose" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btnClose" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>

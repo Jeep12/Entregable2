@@ -11,7 +11,7 @@ let ctx = canvas.getContext('2d');
 let windowWidth = window.innerWidth;
 
 
-let canvasWidth = canvas.width = windowWidth-20;
+let canvasWidth = canvas.width = windowWidth - 20;
 let canvasHeight = canvas.height = 700;
 
 
@@ -35,10 +35,9 @@ let mouseDown = false;
 let penClick = false;
 let erasedClick = false;
 let pencil = null;
-let saved = false;
 let eraser = null;
 let selectedFigure = null;
-let name= "Sin nombre";
+let name = "Sin nombre";
 let offsetX, offsetY;
 
 range1.addEventListener("change", changeRange)
@@ -68,7 +67,7 @@ canvas.addEventListener("mousedown", (e) => {
         eraser = new Eraser(mouseX, mouseY, ctx, size);
         eraser.erase();
     }
- 
+
 
 
 });
@@ -92,7 +91,7 @@ canvas.addEventListener("mousemove", (e) => {
         let mouseY = e.clientY - canvas.getBoundingClientRect().top;
         eraser.moveTo(mouseX, mouseY);
         eraser.erase();
-     
+
     }
     if (isDragging && selectedFigure) {
         const mouseX = e.clientX - canvas.getBoundingClientRect().left;
@@ -108,62 +107,88 @@ canvas.addEventListener("mousemove", (e) => {
         selectedFigure.moveTo(newPosX, newPosY);
 
 
-//dibujo denuevo para que se vaya mostrando mientras se arrastra 
+        //dibujo denuevo para que se vaya mostrando mientras se arrastra 
     }
 
 });
+
+
+
+let penBtn = document.getElementById("pen");
+penBtn.addEventListener("click", (e) => {
+    penClick = true;
+    erasedClick = false; // Restablece erasedClick a false al seleccionar el lápiz
+
+    // Restaura el color de la línea al color del lápiz al seleccionar el lápiz
+    ctx.strokeStyle = inputColor.value;
+    eraser = null;
+
+});
+
+let eraseBtn = document.getElementById("eraser");
+eraseBtn.addEventListener("click", (e) => {
+    erasedClick = true;
+    penClick = false; // Restablece penClick a false al seleccionar la goma de borrar
+
+
+    // Restaura el color de la línea al color de fondo del lienzo al seleccionar la goma de borrar
+    ctx.strokeStyle = backgroundColor;
+    pencil = null; // Restablece la instancia del lápiz a null
+});
+function rgb(r, g, b) {
+    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+}
+
 document.getElementById("clean").addEventListener("click", () => {
 
 
-        ctx.clearRect(0, 0, canvasWidth, canvasHeight); // Limpiar el canvas
-        ctx.fillStyle = backgroundColor; // Restaurar el color de fondo
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight); // Rellenar el canvas con el color de fondo
-        image = null;
-        name = "Sin nombre";
-        showName.innerHTML = name;
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight); // Limpiar el canvas
+    ctx.fillStyle = backgroundColor; // Restaurar el color de fondo
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight); // Rellenar el canvas con el color de fondo
+    image = null;
+    name = "Sin nombre";
+    showName.innerHTML = name;
 
-        
 
-    
+
+
 });
 
 document.getElementById("reloadImage").addEventListener("click", () => {
     let imageInput = document.getElementById("imageInput");
     let selectedImage = imageInput.files[0];
     originalImage.loadImage(selectedImage);
- 
+
 });
 document.getElementById("acceptImg").addEventListener("click", acceptImage);
 function acceptImage(e) {
     // Aquí puedes obtener el valor del input de la imagen y realizar las acciones necesarias
     let imageInput = document.getElementById("imageInput");
     let selectedImage = imageInput.files[0];
-     image = new Photo(ctx, canvasWidth, canvasHeight);
-     originalImage = image; // Almacena la imagen original para recargarla con un boton
-     
-     //obtener el nombre del archivo para verificar que no termine con distintos formatos a png,jpg,jpeg
-     let fileName = selectedImage.name;
+    image = new Photo(ctx, canvasWidth, canvasHeight);
+    originalImage = image; // Almacena la imagen original para recargarla con un boton
 
-     //guardo el nombre del archivo en la variable name para usarlo en otras funciones
-     name = fileName;
-     let showName = document.getElementById("showName").innerHTML=name;
-     document.getElementById("fileName").innerHTML = fileName;
-     
-     if (!fileName.endsWith(".jpg") && !fileName.endsWith(".jpeg") && !fileName.endsWith(".png")) {
+    //obtener el nombre del archivo para verificar que no termine con distintos formatos a png,jpg,jpeg
+    let fileName = selectedImage.name;
+
+    //guardo el nombre del archivo en la variable name para usarlo en otras funciones
+    name = fileName;
+    let showName = document.getElementById("showName").innerHTML = name;
+    document.getElementById("fileName").innerHTML = fileName;
+
+    if (!fileName.endsWith(".jpg") && !fileName.endsWith(".jpeg") && !fileName.endsWith(".png")) {
         // Mostrar un mensaje de error
         alert("Solo se admiten formatos jpg,jpeg y png");
-        
+
         // Limpiar el input de archivo para que el usuario pueda seleccionar nuevamente
         imageInput.value = null;
     }
     ctx.clearRect(0, 0, canvasWidth, canvasHeight); // Limpiar el canvas
-    
+
     image.loadImage(selectedImage);
-    
-    
+
+
 }
-
-
 
 let imageInput = document.getElementById("imageInput");
 imageInput.addEventListener("change", function () {
@@ -172,48 +197,19 @@ imageInput.addEventListener("change", function () {
         let fileName = imageInput.files[0].name;
 
         // Mostrar el nombre del archivo en el div con ID "fileName"
-        document.getElementById("fileName").innerHTML =  "Archivo seleccionado: "+ "<b>"+fileName +"</b>";
+        document.getElementById("fileName").innerHTML = "Archivo seleccionado: " + "<b>" + fileName + "</b>";
     } else {
         // Si no se selecciona ningún archivo, borrar el contenido del div
         document.getElementById("fileName").innerHTML = "";
     }
 })
 
-
-    let penBtn = document.getElementById("pen");
-    penBtn.addEventListener("click", (e) => {
-        penClick = true;
-        erasedClick = false; // Restablece erasedClick a false al seleccionar el lápiz
-
-        // Restaura el color de la línea al color del lápiz al seleccionar el lápiz
-        ctx.strokeStyle = inputColor.value;
-        eraser = null;
-
-    });
-
-    let eraseBtn = document.getElementById("eraser");
-    eraseBtn.addEventListener("click", (e) => {
-        erasedClick = true;
-        penClick = false; // Restablece penClick a false al seleccionar la goma de borrar
-
-
-        // Restaura el color de la línea al color de fondo del lienzo al seleccionar la goma de borrar
-        ctx.strokeStyle = backgroundColor;
-        pencil = null; // Restablece la instancia del lápiz a null
-    });
-function rgb(r, g, b) {
-    return 'rgb(' + r + ', ' + g + ', ' + b + ')';
-}
-
-
-
-
 document.getElementById("saveImage").addEventListener("click", saveCanvasImage);
 function saveCanvasImage() {
 
     // Crear un enlace temporal
     let link = document.createElement('a');
-    
+
     // Obtener la extensión de la imagen original
     let fileInput = document.getElementById("imageInput");
 
@@ -223,7 +219,6 @@ function saveCanvasImage() {
 
     link.href = canvas.toDataURL(); // Utiliza la extensión original para determinar el tipo de imagen
     link.download = fileName; // Usa el nombre original para nombrar el archivo descargado
-    saved = true;
     // Simular un clic en el enlace para descargar la imagen
     link.click();
 }
@@ -232,17 +227,40 @@ function saveCanvasImage() {
 
 //FILTROSSSSSSSSS
 
-document.getElementById("filterSepia").addEventListener("click",()=>
-{
-    if(image!=null){
+document.getElementById("filterSepia").addEventListener("click", () => {
+    if (image != null) {
         image.sepiaFilter();
     }
 });
 
-document.getElementById("filterGray").addEventListener("click",()=>
-{
-    if(image!=null){
+document.getElementById("filterGray").addEventListener("click", () => {
+    if (image != null) {
         image.grayFilter();
+    }
+});
+document.getElementById("filterNegative").addEventListener("click", () => {
+
+    if (image != null) {
+        image.negativeFilter();
+    }
+});
+document.getElementById("filterBlur").addEventListener("click",()=>{
+    if (image != null) {
+        image.blurFilter();
+    }
+});
+document.getElementById("filterBorder").addEventListener("click",()=>{
+    if (image != null) {
+        image.borderFilter();
+    }
+});
+document.getElementById("thresholdRange").addEventListener("input", () => {
+    // Obtén el valor actual del umbral desde el elemento de entrada de rango
+    let thresholdValue = parseInt(document.getElementById("thresholdRange").value);
+
+    // Aplica el filtro de binarización con el umbral actual
+    if (image != null) {
+        image.binarizationFilter(thresholdValue);
     }
 });
 
@@ -252,8 +270,14 @@ document.getElementById("saturationRange").addEventListener("change", () => {
 
     // Aplicar el filtro de saturación con el nuevo nivel de saturación
     if (image != null) {
-        image = originalImage;
         image.saturationFilter(saturationLevel);
     }
 });
 
+
+document.getElementById("brightnessRange").addEventListener("change", () => {
+    let brighnessLevel = parseInt(document.getElementById("brightnessRange").value);
+    if (image != null) {
+        image.brightnessFilter(brighnessLevel);
+    }
+})    

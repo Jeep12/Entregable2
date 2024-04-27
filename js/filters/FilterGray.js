@@ -5,8 +5,7 @@ export default class FilterGray extends Filter {
         super(ctx);
     }
 
-    reDraw() {
-        const imageData = this.ctx.getImageData(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    reDraw(imageData) {
         const data = imageData.data;
 
         for (let i = 0; i < data.length; i += 4) {

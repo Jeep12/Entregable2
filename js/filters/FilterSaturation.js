@@ -8,8 +8,7 @@ export default class FilterSaturation extends Filter {
         this.saturation = saturation; // Nivel de saturación, un valor entre -100 y 100
     }
 
-    reDraw() {
-        const imageData = this.ctx.getImageData(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    reDraw(imageData) {
         const data = imageData.data;
 
         const adjustment = this.saturation / 100;

@@ -3,7 +3,7 @@ export default class Filter {
         this.ctx = ctx;
     }
     
-    reDraw(){
+    reDraw(imageData){
         return null;
     }
 

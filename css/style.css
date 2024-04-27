@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
-
+:root {
+    --bg1: #181818;
+    --bg2: #202020;
+  }
 body {
     padding: 0px;
     margin: 0px;
@@ -45,6 +48,8 @@ body {
     flex-direction: row;
     justify-content: space-around;
     padding-bottom: 10px;
+    font-family: 'Roboto Condensed', sans-serif ;
+
 
 }
 
@@ -53,7 +58,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #181818;
+    background-color: var(--bg1);
 
 }
 
@@ -61,7 +66,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #181818;
+    background-color: var(--bg1);
     width: 20%;
 }
 
@@ -83,7 +88,7 @@ body {
     /* Muestra puntos suspensivos (...) cuando el texto desborde */
     white-space: nowrap;
     /* Evita que el texto se divida en varias líneas */
-    background-color: #202020;
+    background-color: var(--bg2);
     text-align: center;
     padding: 10px;
     width: 250px;
@@ -103,9 +108,11 @@ body {
     width: 40px;
     /* Añadido para que ocupe todo el ancho */
     height: 100%;
+
     border-right: 50px solid transparent;
-    border-bottom: 20px solid #181818;
-    border-top: 20px solid #181818;
+    border-bottom: 20px solid var(--bg1);
+    border-top: 20px solid var(--bg1);
+
 }
 
 #showName::after {
@@ -119,8 +126,8 @@ body {
     /* Añadido para que ocupe todo el ancho */
     height: 100%;
     border-left: 50px solid transparent;
-    border-bottom: 20px solid #181818;
-    border-top: 20px solid #181818;
+    border-bottom: 20px solid var(--bg1);
+    border-top: 20px solid var(--bg1);
 
 }
 
@@ -139,17 +146,15 @@ body {
 }
 
 
-
-
 .dropdown-toggle {
-    background-color: #181818 !important;
+    background-color: var(--bg1) !important;
     border-radius: 5px;
     box-shadow: 5px 5px 5px black;
     color: white;
 }
 
 .dropdown-menu {
-    background-color: #181818;
+    background-color: var(--bg1);
     padding: 0;
     width: 200px;
 
@@ -165,7 +170,7 @@ body {
 }
 
 .dropdown-menu li span:hover {
-    background-color: #202020;
+    background-color: var(--bg2);
     color: white;
     box-shadow: none;
 }
@@ -176,7 +181,7 @@ body {
 }
 
 .dropdown-menu li button:hover {
-    background-color: #202020;
+    background-color: var(--bg2);
     color: white ;
 }
 
@@ -190,7 +195,7 @@ body {
 
     padding-left: 50px;
     padding-right: 30px;
-    background-color: #202020 !important;
+    background-color: var(--bg2) !important;
 }
 
 .nav::before {
@@ -204,7 +209,7 @@ body {
     /* Añadido para que ocupe todo el ancho */
     height: 100%;
     border-right: 100px solid transparent;
-    border-bottom: 70px solid #181818;
+    border-bottom: 70px solid var(--bg1);
 }
 
 .nav::after {
@@ -218,7 +223,7 @@ body {
     /* Añadido para que ocupe todo el ancho */
     height: 100%;
     border-left: 100px solid transparent;
-    border-bottom: 70px solid #181818;
+    border-bottom: 70px solid var(--bg1);
 }
 
 .nav li {
@@ -241,13 +246,13 @@ body {
     text-align: center;
     padding: 2px;
     width: 25px;
-    background-color: #181818;
+    background-color: var(--bg1);
     border-radius: 5px;
 }
 
 .nav li button {
     border: none;
-    background-color: #181818;
+    background-color: var(--bg1);
     color: white;
     box-shadow: 5px 5px 5px black;
     border-radius: 3px;
@@ -288,7 +293,7 @@ body {
 }
 
 .file-select::before {
-    background-color: #202020;
+    background-color: var(--bg2);
     color: white;
     display: flex;
     justify-content: center;
@@ -332,7 +337,7 @@ input[type="range"] {}
 }
 
 .modal-footer button {
-    background-color: #202020 !important;
+    background-color: var(--bg2) !important;
     font-family: 'Roboto Condensed', sans-serif !important;
     border: none;
     color: white;
